@@ -61,3 +61,7 @@
   font-weight: 500;
   color: var(--text-primary);
 }
+
+.trophy {
+  margin-left: 0.25rem;
+}

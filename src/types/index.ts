@@ -20,3 +20,5 @@ export interface ChartDataPoint {
 }
 
 export type AggregationMode = 'day' | 'week'
+
+export type LineStyle = 'line' | 'smooth' | 'area'
