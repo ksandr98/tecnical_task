@@ -6,6 +6,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Legend,
+  Tooltip,
 } from 'recharts'
 import type { ChartDataPoint, Variation } from '../types'
 import styles from './Chart.module.css'
@@ -21,6 +22,29 @@ interface ChartProps {
   data: ChartDataPoint[]
   variations: Variation[]
   selectedVariations: string[]
+}
+
+interface TooltipProps {
+  active?: boolean
+  payload?: Array<{ name: string; value: number; color: string }>
+  label?: string
+}
+
+function CustomTooltip({ active, payload, label }: TooltipProps) {
+  if (!active || !payload || payload.length === 0) return null
+
+  return (
+    <div className={styles.tooltip}>
+      <div className={styles.tooltipDate}>{label}</div>
+      {payload.map((entry) => (
+        <div key={entry.name} className={styles.tooltipRow}>
+          <span className={styles.tooltipDot} style={{ background: entry.color }} />
+          <span className={styles.tooltipName}>{entry.name}</span>
+          <span className={styles.tooltipValue}>{entry.value}%</span>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 function Chart({ data, variations, selectedVariations }: ChartProps) {
@@ -45,6 +69,10 @@ function Chart({ data, variations, selectedVariations }: ChartProps) {
             domain={['auto', 'auto']}
             className={styles.axis}
           />
+          <Tooltip
+            content={<CustomTooltip />}
+            cursor={{ stroke: 'var(--text-muted)', strokeWidth: 1, strokeDasharray: '4 4' }}
+          />
           <Legend wrapperStyle={{ color: 'var(--text-secondary)' }} />
           {visibleVariations.map((variation) => (
             <Line
@@ -54,7 +82,7 @@ function Chart({ data, variations, selectedVariations }: ChartProps) {
               stroke={COLORS[variation.name]}
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 4 }}
+              activeDot={{ r: 5, strokeWidth: 0 }}
               connectNulls={false}
             />
           ))}
