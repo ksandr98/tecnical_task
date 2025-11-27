@@ -17,7 +17,7 @@ function App() {
   const [zoomDomain, setZoomDomain] = useState<{ start: number; end: number } | null>(null)
 
   useEffect(() => {
-    fetch('/data.json')
+    fetch(import.meta.env.BASE_URL + 'data.json')
       .then((res) => res.json())
       .then((data: RawData) => {
         setRawData(data)
